@@ -18,7 +18,7 @@
                         @click="onSearch(-1)"
                         type="button"
                         class="btn btn-primary"
-                        :disabled=" is_previos_disabled"
+                        :disabled="is_previos_disabled"
                     >Previous
                     </button>
                     <button
@@ -40,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(abilitys, index) in items.results">
+        <tr v-for="(abilitys, index) in items.results" :key="abilitys.url">
           <td>{{ index + 1 + form.offset }}</td>
           <td>{{ abilitys.name }}</td>
           <td>{{ abilitys.url }}</td>
@@ -76,7 +76,6 @@ export default {
       deep: true,
       async handler() {
         await this.getAbilitys();
-        console.log(this.form.offset, 'OFFSET');
       },
     },
 
@@ -116,7 +115,7 @@ export default {
     async getAbilitys() {
       const response = await axios.get('https://pokeapi.co/api/v2/ability?',
         {
-          ...this.form,
+         params: this.form,
         }
       );
       this.items = await response.data;
