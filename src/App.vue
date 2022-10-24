@@ -52,66 +52,45 @@
     </div>
 </template>
 
-<script>
-import debounce from 'lodash.debounce'
+<template>
+  <header>
+    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-export default {
-    data() {
-        return {
-            items: {
-                count: 0,
-            },
-            search: '',
-            form: {
-                offset: 0,
-                limit: 20,
-                search: ''
-            },
-        };
-    },
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
+    </div>
+  </header>
 
-    watch: {
-        form: {
-            deep: true,
-            async handler() {
-                await this.getPokemons();
-            },
-        },
+  <main>
+    <TheWelcome />
+  </main>
+</template>
 
-        search: debounce(async function() {
-            this.form.search = this.search
-        }, 2000),
-    },
+<style scoped>
+header {
+  line-height: 1.5;
+}
 
-    computed: {
-        previous_disabled() {
-            return this.form.offset <= 0;
-        },
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
 
-        next_disabled() {
-            return this.form.offset + this.form.limit >= this.items.count;
-        },
-    },
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
 
-    async created() {
-        await this.getPokemons();
-    },
+  .logo {
+    margin: 0 2rem 0 0;
+  }
 
-    methods: {
-        onPaginate(pagination = 1) {
-            if (pagination > 0) {
-                this.form.offset += this.form.limit;
-            } else {
-                this.form.offset -= this.form.limit;
-            }
-        },
-
-        async getPokemons() {
-            const response = await fetch(
-                `https://pokeapi.co/api/v2/pokemon?offset=${this.form.offset}&limit=${this.form.limit}`
-            );
-            this.items = await response.json();
-        },
-    },
-};
-</script>
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+</style>
